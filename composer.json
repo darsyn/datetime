@@ -9,8 +9,8 @@
             "email": "hello@zanbaldwin.com"
         }
     ],
-    "minimum-stability": "stable",
     "require": {
+        "php": ">=7.2",
         "ext-json": "*"
     },
     "autoload": {
@@ -19,11 +19,22 @@
         }
     },
     "require-dev": {
+        "doctrine/dbal": "^2.3",
+        "sensio/framework-extra-bundle": "^5.0",
         "phpunit/phpunit": "^7.0"
     },
     "autoload-dev": {
         "psr-4": {
             "Darsyn\\DateTime\\Tests\\": "tests/"
         }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "suggest": {
+        "doctrine/dbal": "to use UtcDateTime as a column type",
+        "sensio/framework-extra-bundle": "to use parameter converters in controller arguments"
     }
 }
