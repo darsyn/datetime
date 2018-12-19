@@ -1,0 +1,29 @@
+{
+    "name": "darsyn/datetime",
+    "description": "Utility to work with consistent dates, forcing the UTC timezone.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Zan Baldwin",
+            "email": "hello@zanbaldwin.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Darsyn\\DateTime\\": "src/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Darsyn\\DateTime\\Tests\\": "tests/"
+        }
+    }
+}
