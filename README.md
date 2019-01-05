@@ -63,7 +63,7 @@ try {
 use Darsyn\DateTime\Doctrine\UtcDateType;
 use Doctrine\DBAL\Types\Type;
 
-Type::addType('ip', UtcDateType::class);
+Type::addType('utc', UtcDateType::class);
 ```
 
 ## Symfony Parameter Converter Integration
