@@ -8,7 +8,7 @@ class DateTime extends \DateTimeImmutable implements DateTimeInterface
     public function __construct(?string $datetime = null, ?\DateTimeZone $timezone = null)
     {
         $datetime = new \DateTime($datetime ?: 'now', $timezone);
-        parent::__construct($datetime->format('Y-m-d\TH:i:s.000000P'), $timezone);
+        parent::__construct($datetime->format(DateTimeInterface::NO_TIMEZONE), $timezone);
     }
 
     /**
