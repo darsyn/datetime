@@ -8,7 +8,10 @@ class DateTime extends \DateTimeImmutable implements DateTimeInterface
     public function __construct(?string $datetime = null, ?\DateTimeZone $timezone = null)
     {
         $datetime = new \DateTime($datetime ?: 'now', $timezone);
-        parent::__construct($datetime->format(DateTimeInterface::NO_TIMEZONE), $timezone);
+        if ($timezone instanceof \DateTimeZone) {
+            $datetime->setTimezone($timezone);
+        }
+        parent::__construct($datetime->format(DateTimeInterface::NO_TIMEZONE), $timezone ?? $datetime->getTimezone());
     }
 
     /**
@@ -17,12 +20,10 @@ class DateTime extends \DateTimeImmutable implements DateTimeInterface
      */
     public static function createFromFormat($format, $time, ?\DateTimeZone $timezone = null): self
     {
-        // DateTimeImmutable's createFromFormat() method returns instances of DateTimeImmutable rather than static
-        // (child class), so we'll unfortunately have to replicate some of the constructor logic here.
         if (!\is_object($datetime = \DateTime::createFromFormat($format, $time, $timezone))) {
             throw new \InvalidArgumentException('Value not compatible with date format.');
         }
-        return new static($datetime->format(DateTimeInterface::NO_TIMEZONE), $datetime->getTimezone());
+        return new static($datetime->format(DateTimeInterface::RFC3339), $timezone ?? $datetime->getTimezone());
     }
 
     /** {@inheritdoc} */
@@ -38,9 +39,9 @@ class DateTime extends \DateTimeImmutable implements DateTimeInterface
     }
 
     /** {@inheritdoc} */
-    public static function createFromTimestamp(int $timestamp): DateTimeInterface
+    public static function createFromTimestamp(int $timestamp, ?\DateTimeZone $timezone = null): DateTimeInterface
     {
-        return static::createFromFormat('U', (string) $timestamp);
+        return static::createFromFormat('U', (string) $timestamp, $timezone);
     }
 
     /** {@inheritdoc} */

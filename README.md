@@ -22,19 +22,37 @@ two interfaces ([`DateInterface`](src/DateInterface.php) and
 - **DTI**'s `createFromObject(\DateTimeInterface $datetime): static` is the
   same as `\DateTimeImmutable::createFromMutable()` but works with any object
   that implements `\DateTimeInterface`.
-- **DTI**'s `createFromTimestamp(int $timestamp): static` creates a **DTI**
-  object from an integer timestamp.
+- **DTI**'s `createFromTimestamp(int $timestamp, ?\DateTimeZone $tz): static`
+  creates a **DTI** object from an integer timestamp (and optional timezone,
+  meaning identical timestamps using different timezones will result in
+  differing date strings).
   
 On top of these, **DTI** objects can be stringified into a format appropriate to
 the calling class, and when JSON-enoded returns that string instead of
 `{"date","timezone_type","timezone"}` objects. The string formats are as
 follows:
 
-| Class         | Format           | Example                    |
-|---------------|------------------|----------------------------|
-| `Date`        | `Y-m-d`          | `2018-12-19`               |
-| `DateTime`    | `Y-m-d\TH:i:sP`  | `2018-12-19T14:03:24+0100` |
-| `UtcDateTime` | `Y-m-d\TH:i:s\Z` | `2018-12-19T13:03:24Z`     |
+| Class         | Format           | Example                     |
+|---------------|------------------|-----------------------------|
+| `Date`        | `Y-m-d`          | `2018-12-19`                |
+| `DateTime`    | `Y-m-d\TH:i:sP`  | `2018-12-19T14:03:24+01:00` |
+| `UtcDateTime` | `Y-m-d\TH:i:s\Z` | `2018-12-19T13:03:24Z`      |
+
+The `DateTime` object will handle automatic conversions between timezones. For
+example, if you supply a datetime string which includes a timezone (such as
+`2019-01-09T12:34:56+04:30` which is Afghanistan time) and supply a differing
+timezone object (such as `Australia/Perth`) the date will automatically get
+converted correctly into the timezone of the supplied object (in this example,
+`2019-01-09T16:04:56+08:00`).
+
+```php
+<?php
+
+$dateString = '2019-01-09T12:34:56+04:30';
+$timezone = new \DateTimeZone('Australia/Perth');
+$datetime = new DateTime($dateString, $timezone);
+echo $datetime; // string(24) "2019-01-09T16:04:56+08:00"
+```
 
 ## Brief Example
 
@@ -49,7 +67,7 @@ try {
         'Wednesday, 9th May, 2018 (3:34pm)',
         new \DateTimeZone('Australia/Perth')
     );
-    var_dump($datetime); // string(20) "2018-05-09T07:34:00Z"
+    echo $datetime; // string(20) "2018-05-09T07:34:00Z"
 } catch (\InvalidArgumentException $e) {
     exit('Could not construct object; value does not conform to date format.');
 }
