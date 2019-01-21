@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Tests\Model;
+namespace Darsyn\DateTime\Tests;
 
 use Darsyn\DateTime\DateTimeInterface;
 use Darsyn\DateTime\UtcDateTime;

@@ -15,10 +15,11 @@ interface DateTimeInterface extends \DateTimeInterface, \JsonSerializable
     public static function createFromObject(\DateTimeInterface $datetime): self;
 
     /**
-     * @param int $timestamp
+     * @param integer $timestamp
+     * @param \DateTimeZone|null $timezone
      * @return \Darsyn\DateTime\DateTimeInterface
      */
-    public static function createFromTimestamp(int $timestamp): self;
+    public static function createFromTimestamp(int $timestamp, ?\DateTimeZone $timezone = null): self;
 
     /**
      * @return string
